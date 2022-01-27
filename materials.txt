@@ -1,0 +1,79 @@
+22222
+automotive
+auto fluids
+car batteries
+tires
+motor oil
+filters
+construction
+carpet
+construction waste
+shingles
+glass
+glass bottles
+glass jars
+metal
+aerosol cans
+aluminum cans
+aluminum foil
+metal
+ tin 
+steel cans
+household waste
+fluorescent tubes
+mercury-containing items
+medical sharps
+medications
+paint
+pesticides
+plastic containers
+plastic
+packing peanuts
+plastic bags
+plastic caps
+plastic lids
+plastic jugs
+plastic bottles
+plastic wrap
+plastic film
+electronics
+ cds 
+tapes
+cell phones
+computer monitors
+computers
+inkjet cartridges
+large appliances
+large electronics
+led light bulbs
+rechargeable batteries
+batteries
+small appliances
+small electronics
+paper
+books
+magazines
+cardboard
+cartons
+frozen food boxes
+gift cards
+gift wrap
+newspaper
+paper
+paper bags
+paper cups
+paperboard
+phone books
+shredded paper
+waxed cardboard
+household
+bathroom products
+christmas trees
+clothing
+cooking oil
+cookware
+corks
+furniture
+household cleaners
+mattresses
+pillows
