@@ -1,4 +1,4 @@
-
+#Import all packages needed
 import requests
 from difflib import SequenceMatcher as sm
 import urllib.request
@@ -7,6 +7,8 @@ import geocoder
 from geopy.geocoders import Nominatim
 from geopy.extra.rate_limiter import RateLimiter
 import time
+
+#global variables
 barcode_spider_api_key = "f4f9fe42f4d67f5f9070"
 material_file = "materials.txt"
 material_array = ""
@@ -29,13 +31,14 @@ splash = '''
                                                     
 '''
 
+#Similarity recognition function
 def similar(a, b):
     return sm(None, a, b).ratio()
 
 
 
 
-
+#Opening the materials.txt file
 def readMaterialFile(filename):
     try:
         text_file = open(filename, "r")
@@ -140,6 +143,7 @@ def getMaterial(brand, barcode_result):
 
 #Test barcode: 049000028904
 
+
 def searchEarth911Products(item):
     earth911_query = (earth911_url + 'earth911.getProductDetails?api_key=' + earth911_api_key +'&upc=' + item)
     text = urllib.request.urlopen(earth911_query).read()
@@ -149,13 +153,7 @@ def searchEarth911Products(item):
     else:
         return result['result']
 
-'''
--------------------------------------------------------------------------
-|                                                             Search Earth911                                                 |
-|This function uses the json api to search Earth911 to search for a                 |
-|                                                        material in the database                                         |
--------------------------------------------------------------------------
-'''
+#Earth911 Search
 def searchEarth911(item, lat, lon):
     item = item.replace(' ', '+')
     earth911_query = (earth911_url + 'earth911.searchMaterials?api_key=' + earth911_api_key +'&query=' + item + '&max_results=1')
@@ -189,7 +187,7 @@ def searchEarth911(item, lat, lon):
 
     
 
-
+#Main Menu
 print(splash + "By: Gabriel, 1/13/2022")
 while(True):
     option = input("\nPlease Select an Option \nSearch for Product (s) \nAbout Us (a) \n>")
