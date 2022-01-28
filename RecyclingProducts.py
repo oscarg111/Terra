@@ -9,16 +9,16 @@ from geopy.extra.rate_limiter import RateLimiter
 import time
 
 #global variables
-barcode_spider_api_key = "f4f9fe42f4d67f5f9070"
+barcode_spider_api_key = "****************"
 material_file = "materials.txt"
 material_array = ""
 wms_url = "https://www.google.com/search?q="
 earth911_url = 'http://api.earth911.com/'
-earth911_api_key = 'c21ff4fe1052dda1'
+earth911_api_key = '****************'
 wms_product_search = '+"packaging material"'
 geocoder = Nominatim(user_agent="geoapiExercises")
 geocode = RateLimiter(geocoder.geocode,min_delay_seconds = 1, return_value_on_exception = None)
-about_us = "FILL IN LATER"
+about_us = ""
 splash = '''
 
 ████████ ███████ ██████  ██████   █████  
