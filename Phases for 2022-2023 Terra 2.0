@@ -1,0 +1,32 @@
+PREPHASE: Recover old code and restore (if needed)
+
+PHASE 1:
+
+Create a database of products with barcodes and other necessary information to avoid searching repeated products
+Create a system to sort out the result into [trash/recycling/(compost)]
+Formulate an idea to speed up searching process (not vital to the system for P1)
+Create system to make the ‘education’ of the user more prevalent in the system
+
+PHASE 2:
+
+Create Barcode image recognition
+Using camera or Barcode Scanner
+Database made of barcode images that correspond with the database in P1
+Attempt to create an E-waste functionality
+With places to recycle
+And incentive details
+Similar to Earth911 API search
+
+PHASE 3:
+
+Create image recognition
+Using Camera
+Use an API (google/microsoft)
+Create faster loading speeds (again, not vital to the system)
+Save images to a database as well as barcode details
+Can be used to avoid loading times
+
+PHASE 4:
+
+AI like system
+Usage of the databases from P1/P2/P3 to aid in a hassle free search system
