@@ -4,19 +4,19 @@ from difflib import SequenceMatcher as sm
 import urllib.request
 import simplejson
 import geocoder
-from geopy.geocoders import Nominatim
+from geopy.geocoders import Photon
 from geopy.extra.rate_limiter import RateLimiter
 import time
 
 #global variables
-barcode_spider_api_key = "****************"
+barcode_spider_api_key = "f4f9fe42f4d67f5f9070"
 material_file = "materials.txt"
 material_array = ""
 wms_url = "https://www.google.com/search?q="
 earth911_url = 'http://api.earth911.com/'
-earth911_api_key = '****************'
+earth911_api_key = 'c21ff4fe1052dda1'
 wms_product_search = '+"packaging material"'
-geocoder = Nominatim(user_agent="geoapiExercises")
+geocoder = Photon(user_agent="geoapiExercises")
 geocode = RateLimiter(geocoder.geocode,min_delay_seconds = 1, return_value_on_exception = None)
 about_us = ""
 splash = '''
@@ -99,8 +99,8 @@ def getMaterial(brand, barcode_result):
         return 0
     content = str(page.text)
 
-    
-     
+
+
     content_array = content.split()
 
     for ma in material_array:
@@ -130,14 +130,14 @@ def getMaterial(brand, barcode_result):
                     return material_array[int(input(">"))]
                 except:
                     print("Invalid ID")
-    
+
         print("Invalid Option")
-       
 
 
 
-    #print("Result: " + largest_instance)       
-        
+
+    #print("Result: " + largest_instance)
+
 
 #getMaterial("Horizon Milk")
 
@@ -149,7 +149,7 @@ def searchEarth911Products(item):
     text = urllib.request.urlopen(earth911_query).read()
     result = simplejson.loads(text)
     if 'error' in result:
-        return 0 
+        return 0
     else:
         return result['result']
 
@@ -162,13 +162,13 @@ def searchEarth911(item, lat, lon):
     result = simplejson.loads(text)
     if 'error' in result:
         return 0
-    
+
     found_material = result['result']
     found_materialv2 = found_material[0]
     found_materialv3 = found_materialv2['material_id']
     print("Searching Database, please wait, the system takes about a minute to search.")
     earth911_location_query = (earth911_url + 'earth911.searchLocations?api_key=' + earth911_api_key + '&latitude=' + str(lat) + '&longitude=' + str(lon) + '&material_id=' + str(found_materialv3))
-    
+
     text = urllib.request.urlopen(earth911_location_query).read()
 
     result = simplejson.loads(text)
@@ -179,13 +179,13 @@ def searchEarth911(item, lat, lon):
         for res in result['result']:
             #try:
             #print(res['description'])
-                
+
             print("\nFound a result:\n" + "Location: " + res['description'] + "\nDistance from city center: " + str(res['distance']) + "mi.\nIs it curbside?: " + str(res['curbside']))
 
             #except:
                 #print("")
 
-    
+
 
 #Main Menu
 print(splash + "By: Gabriel, 1/13/2022")
@@ -195,8 +195,9 @@ while(True):
 
     if(option == optionlist[0]):
         print(" \nProduct Search\n ")
-       
+
         location = geocode(input("Input your city of residence (ex: Fairfax, VA): "))
+
         location_data = location.raw
         time.sleep(1)
 
@@ -206,7 +207,7 @@ while(True):
         if(len(earth911output) == 0):
             print("did not find in history, searching the internet. . . .")
             product_data = BarcodeProduct(userinput, barcode_spider_api_key)
-            
+
             if(product_data == {"manu": "11111", "brand": "11111", "description": "11111", "temp1": "11111"}):
                 print("No Internet Connection, please check your modem or router and try again")
             elif(product_data == {"manu": "00000", "brand": "00000", "description": "00000", "temp1": "00000"}):
@@ -225,19 +226,19 @@ while(True):
                         print("Searching Material {0} in Database: ".format(likely_material))
                         searchEarth911(likely_material, str(location_data['lat']), str(location_data['lon']))
                     print("\n_________________________________\n")
-                    
-                    
+
+
         else:
             print(earth911output)
 
-      
+
     elif(option == optionlist[1]):
         print(about_us)
-    
-        
+
+
     else:
         print("Not Valid")
-        
+
     print("_________________________________")
 
 
