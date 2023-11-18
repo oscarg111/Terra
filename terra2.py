@@ -9,6 +9,8 @@ The database has the following format
 '''
 
 import requests
+import cv2
+from pyzbar.pyzbar import decode
 from difflib import SequenceMatcher as sm
 import urllib.request
 import simplejson
@@ -26,6 +28,7 @@ earth911_api_key = 'c21ff4fe1052dda1'
 wms_product_search = '+"packaging material"'
 geocoder = Photon(user_agent="geoapiExercises")
 geocode = RateLimiter(geocoder.geocode, min_delay_seconds=1, return_value_on_exception=None)
+cap = cv2.VideoCapture(0)
 
 
 # Define Program Classes
@@ -54,6 +57,40 @@ def similaritySort(database):
             mostLikelyMaterial = i
 
     return mostLikelyMaterial
+
+def scan_barcodes(frame):
+    barcodes = decode(frame)
+    barcode_data = 0
+    for barcode in barcodes:
+        # Extract the barcode data and draw a rectangle around it
+        barcode_data = barcode.data.decode('utf-8')
+        x, y, w, h = barcode.rect
+        cv2.rectangle(frame, (x, y), (x + w, y + h), (0, 255, 0), 2)
+
+        # Display the barcode data
+        font = cv2.FONT_HERSHEY_DUPLEX
+        cv2.putText(frame, barcode_data, (x, y - 10), font, 0.9, (0, 255, 0), 1)
+        barspiresult = BarcodeProduct(barcode_data, barcode_spider_api_key)
+        city_name = input("Input your city of residence (ex: Fairfax, VA): ")
+        print(barcode_data)
+        # database = loadDatabase()
+        materials = findMaterials(barcode_data, database)
+        # print(materials)
+        searchEarth911(materials, city_name)
+
+        try:
+            int(barcode_data)
+            # database = loadDatabase()
+            # findMaterials(upc, database)
+            break
+
+
+        except:
+            print("Please enter a valid barcode")
+            break
+
+    return frame
+
 
 
 # Searches for a UPC code in material database, if no exact match found, guesses based on brand occurence
@@ -253,29 +290,23 @@ def searchEarth911(item, city_name):
 print("Welcome to Terra")
 database = loadDatabase()
 # print(database)
-while (True):
-    city_name = input("Input your city of residence (ex: Fairfax, VA): ")
+while True:
 
     # location = geocode(input("Input your city of residence (ex: Fairfax, VA): "))
     # location_data = location.raw
     # time.sleep(1)
 
-    upc = input("Input Barcode Here:  ")
-    barspiresult = BarcodeProduct(upc, barcode_spider_api_key)
+    # upc = input("Input Barcode Here:  ")
 
-    # database = loadDatabase()
-    materials = findMaterials(upc, database)
-    # print(materials)
-    searchEarth911(materials, city_name)
-    try:
-        int(upc)
-        # 3database = loadDatabase()
-        # findMaterials(upc, database)
+    ret, frame = cap.read()
+    frame = scan_barcodes(frame)
+    cv2.imshow("Terra", frame)
+    if cv2.waitKey(1) & 0xFF == ord('q'):
         break
 
-    except:
-        print("Please enter a valid barcode")
-        break
+
+cap.release()
+cv2.destroyAllWindows()
 
 # 049000026566
 
