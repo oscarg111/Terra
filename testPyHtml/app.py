@@ -1,13 +1,4 @@
-'''
-This is Terra (A project for Science Fair 2021 - 2023)
-
-This code will take a user input (in this case a barcode) and use a local database with a variety of information on the product
-It will use the database to match to a material and find recyclability data on that material
-The database has the following format
-
-<material>;<array of upc barcode(s)>;<material description>;<link on material for more information>
-'''
-
+from flask import Flask, render_template, request
 import requests
 import cv2
 from pyzbar.pyzbar import decode
@@ -31,9 +22,10 @@ geocode = RateLimiter(geocoder.geocode, min_delay_seconds=1, return_value_on_exc
 barcode_data = ""
 keep_scan_bar = True
 keep_input = "y"
+app = Flask(__name__)
 
 
-# Define Program Classes
+# Your existing Terra code here...
 class Material:
     def __init__(self, type_m, product, descrip, link):
         self.type_m = type_m
@@ -269,19 +261,13 @@ def searchEarth911(item, city_name):
             # try:
             # print(res['description'])
 
-            print("\nFound a result:\n" + "Location: " + res['description'] + "\nDistance from city center: " + str(
-                res['distance']) + "mi.\nIs it curbside?: " + str(res['curbside']))
+            return "\nFound a result:\n" + "Location: " + res['description'] + "\nDistance from city center: " + str(
+                res['distance']) + "mi.\nIs it curbside?: " + str(res['curbside'])
 
             # except:
             # print("")
 
 
-# Start of program
-print("Welcome to Terra")
-database = loadDatabase()
-
-
-# print(database)
 def get_items():
     cap = cv2.VideoCapture(0)
 
@@ -303,23 +289,33 @@ def get_items():
     cv2.destroyAllWindows()
 
 
+database = loadDatabase()
 
-# 049000026566
 
-# 049000075045
+# Flask route for the home page
+@app.route('/')
+def home():
+    return render_template('index.html')
 
-# 009800895250
 
-# Application loop
-while keep_input == "y":
-    city_name = input("Input your city of residence (ex: Fairfax, VA): ")
+# Flask route to handle barcode scanning and display results
+@app.route('/scan', methods=['POST'])
+def scan():
+    global barcode_data
+    city_name = request.form['city_name']
     get_items()
     barspiresult = BarcodeProduct(barcode_data, barcode_spider_api_key)
     print(barcode_data)
     # database = loadDatabase()
     materials = findMaterials(barcode_data, database)
     print(materials)
-    searchEarth911(materials, city_name)
+    earth911_results = searchEarth911(materials, city_name)
+    # Call the function to scan barcodes and retrieve product information
+    # You can modify this function to return data that you want to display on the HTML page
 
-    keep_input = input("Do you want to keep scanning?(y/n)")
+    return render_template('results.html', barcode_data=barcode_data, materials=materials,
+                           earth911_results=earth911_results)
 
+
+if __name__ == '__main__':
+    app.run(debug=True)
