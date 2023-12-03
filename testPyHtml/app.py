@@ -269,6 +269,7 @@ def searchEarth911(item, city_name):
 
 
 def get_items():
+    global keep_scan_bar
     cap = cv2.VideoCapture(0)
 
     while keep_scan_bar:
@@ -285,6 +286,7 @@ def get_items():
         if cv2.waitKey(1) & 0xFF == ord('q'):
             break
 
+    keep_scan_bar = True
     cap.release()
     cv2.destroyAllWindows()
 
